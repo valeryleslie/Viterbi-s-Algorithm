@@ -1,0 +1,23 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def viterbi(y, A, E, initial_prob):
+    table = [[0 for x in range(len(y))] for x in range(len(A))]
+    table[0][0] = initial_prob[0]*E[0][0]
+    table[1][0] = initial_prob[1]*E[1][0]
+    for i in range(1, len(y)):
+        table[0][i] = E[0][i] * max(A[0][0] * table[0][i - 1], A[1][0] * table[1][i - 1])
+        table[1][i] = E[1][i] * max(A[0][1] * table[0][i - 1], A[1][1] * table[1][i - 1])
+    return table
+def vit_arrow(y, A, E, initial_prob, tab):
+    table = [[0 for x in range(len(y))] for x in range(len(A))]
+    table[0][0] = initial_prob[0] * E[0][0]
+    table[1][0] = initial_prob[1] * E[1][0]
+    for i in range(1, len(y)):
+        table[0][i] = "left"
+        if (A[0][1] * tab[0][i - 1] > A[1][1] * tab[1][i-1]):
+            table[1][i] = "diag"
+        else:
+            table[1][i] = "left"
+    return table
